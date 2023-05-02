@@ -9,10 +9,10 @@ DB_ULR = os.environ.get("PGURL_LOCAL")
 
 class Database:
     
-    def __init__(self, db_url):
-        self.url = db_url
+    def __init__(self):
+        self.url = DB_ULR
         try:
-            self.conect = psycopg2.connect(db_url)
+            self.conect = psycopg2.connect(self.url)
             self.cursor = self.conect.cursor()
         except Exception as e:
             print(f'Falha ao conectar no banco de dados: {e}')
@@ -57,18 +57,10 @@ class Database:
     def validateUser(self, email, password):
         sql = f'''SELECT id,name,email,password FROM "users" WHERE email = '{email}' '''
         q = self.query(sql)
-        stored_hash = q[0][3]
-        print(stored_hash,password)
-        check_pass = check_password_hash(stored_hash,password)
-        return check_pass
-
-if __name__ == '__main__':
-    db = Database(DB_ULR)
-    print(db)
-
-    nome = 'GUSTAVO MARSOLA BORGES'
-    e_mail = 'gmarsola@gmail.com'
-    senha = os.environ.get('PASSWORD_GUSTAVO')
-    # reg = db.registerUser(nome,e_mail,senha)
-    conf = db.validateUser(e_mail,senha)
-    print(conf)
+        if q:
+            stored_hash = q[0][3]
+            print(stored_hash,password)
+            check_pass = check_password_hash(stored_hash,password)            
+            return check_pass, q
+        else:
+            return False, 0

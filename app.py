@@ -1,11 +1,5 @@
-import os
 from flask import Flask, render_template
 from database import Database
-from dotenv import load_dotenv
-
-load_dotenv('.env')
-
-DB_ULR = os.environ.get("PGURL_LOCAL")
 
 app = Flask(__name__)
 

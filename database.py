@@ -37,9 +37,6 @@ class Database:
     def setPassword(self,password):
         self.hash_password = generate_password_hash(password)
         return self.hash_password
-    # def checkPassword(self, password):
-    #     return check_password_hash(self.hash_password, password)
-    
     def registerUser(self, name, email, password):
         sql = f'''SELECT * FROM "users" WHERE email = '{email}' '''
         if self.query(sql):
